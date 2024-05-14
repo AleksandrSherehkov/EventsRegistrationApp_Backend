@@ -25,7 +25,6 @@ const fetchEvents = async () => {
             category: event.category,
             country: event.country,
             date: event.start,
-            endDate: event.end,
           });
         }
       }

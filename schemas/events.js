@@ -11,19 +11,16 @@ const eventAddSchema = Joi.object({
     'date.base': 'date field should be a date',
     'date.isoDate': 'date field should be in ISO 8601 date format',
   }),
-  location: Joi.string().required().messages({
-    'string.base': 'location field should be a string',
+  category: Joi.string().required().messages({
+    'string.base': 'category field should be a string',
   }),
 });
 
 const eventQuerySchema = Joi.object({
-  sortBy: Joi.string()
-    .valid('title', 'category', 'country', 'date')
-    .default('date'),
-  order: Joi.string().valid('asc', 'desc').default('asc'),
   page: Joi.number().integer().min(1).default(1),
   limit: Joi.number().integer().min(1).max(100).default(12),
   filterQuery: Joi.string().allow(''),
+  date: Joi.date().iso().optional(),
 });
 
 module.exports = {

@@ -25,10 +25,6 @@ const eventSchema = new Schema(
       type: Date,
       required: [true, 'Set date for event'],
     },
-    endDate: {
-      type: Date,
-      required: [true, 'Set end date for event'],
-    },
   },
   { versionKey: false, timestamps: true }
 );
