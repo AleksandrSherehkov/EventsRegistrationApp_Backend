@@ -5,7 +5,7 @@ const { HttpError } = require('../helpers');
 
 const getAll = async (req, res) => {
   const page = parseInt(req.query.page, 10) || 1;
-  const limit = parseInt(req.query.limit, 10) || 15;
+  const limit = parseInt(req.query.limit, 10) || 9;
   const filterQuery = req.query.filterQuery || '';
   const startDate = req.query.date ? new Date(req.query.date) : null;
   const skip = (page - 1) * limit;

@@ -11,6 +11,7 @@ const queryParamValidate = validateQuery(schemas.userQuerySchema);
 const router = express.Router();
 
 router.get('/', queryParamValidate, ctrl.getAll);
+router.get('/event/:eventId', ctrl.getByEventId);
 
 // router.get('/:id', isValidId, ctrl.getById);
 
