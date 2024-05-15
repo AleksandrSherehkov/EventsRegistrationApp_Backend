@@ -76,8 +76,13 @@ const add = async (req, res) => {
   res.status(201).json(result);
 };
 
+const getPing = async (_, res) => {
+  res.status(200).json({ message: 'Server is alive' });
+};
+
 module.exports = {
   getAll: ctrlWrapper(getAll),
   add: ctrlWrapper(add),
   getByEventId: ctrlWrapper(getByEventId),
+  getPing: ctrlWrapper(getPing),
 };
