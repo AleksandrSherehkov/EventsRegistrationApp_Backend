@@ -14,11 +14,14 @@ const eventAddSchema = Joi.object({
   category: Joi.string().required().messages({
     'string.base': 'category field should be a string',
   }),
+  country: Joi.string().required().messages({
+    'string.base': 'country field should be a string',
+  }),
 });
 
 const eventQuerySchema = Joi.object({
   page: Joi.number().integer().min(1).default(1),
-  limit: Joi.number().integer().min(1).max(100).default(12),
+  limit: Joi.number().integer().min(1).max(100).default(9),
   filterQuery: Joi.string().allow(''),
   date: Joi.date().iso().optional(),
 });

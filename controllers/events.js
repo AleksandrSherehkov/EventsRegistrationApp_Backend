@@ -1,10 +1,11 @@
 const Event = require('../models/Event');
 
 const { ctrlWrapper } = require('../decorators');
+const { HttpError } = require('../helpers');
 
 const getAll = async (req, res) => {
   const page = parseInt(req.query.page, 10) || 1;
-  const limit = parseInt(req.query.limit, 10) || 12;
+  const limit = parseInt(req.query.limit, 10) || 15;
   const filterQuery = req.query.filterQuery || '';
   const startDate = req.query.date ? new Date(req.query.date) : null;
   const skip = (page - 1) * limit;
@@ -33,12 +34,43 @@ const getAll = async (req, res) => {
   });
 };
 
+const getById = async (req, res) => {
+  const { id } = req.params;
+  const result = await Event.findById(id);
+  if (!result) {
+    throw HttpError(404, `Customer with this id=${id} not found`);
+  }
+  res.json(result);
+};
+
 const add = async (req, res) => {
-  const newEvent = await Event.create(req.body);
-  res.status(201).json(newEvent);
+  const { _id: owner } = req.user;
+  const result = await Event.create({ ...req.body, owner });
+  res.status(201).json(result);
+};
+
+const updateById = async (req, res) => {
+  const { id } = req.params;
+  const result = await Event.findByIdAndUpdate(id, req.body, { new: true });
+  if (!result) {
+    throw HttpError(404, `Customer with this id=${id} not found`);
+  }
+  res.json(result);
+};
+
+const deleteById = async (req, res) => {
+  const { id } = req.params;
+  const result = await Event.findByIdAndDelete(id);
+  if (!result) {
+    throw HttpError(404, `Customer with this id=${id} not found`);
+  }
+  res.json({ message: 'Delete success' });
 };
 
 module.exports = {
   getAll: ctrlWrapper(getAll),
+  getById: ctrlWrapper(getById),
   add: ctrlWrapper(add),
+  updateById: ctrlWrapper(updateById),
+  deleteById: ctrlWrapper(deleteById),
 };
