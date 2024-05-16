@@ -37,6 +37,7 @@ const getByEventId = async (req, res) => {
   const filter = { eventIds: eventId };
   if (filterQuery) {
     filter.$or = [{ name: { $regex: filterQuery, $options: 'i' } }];
+    filter.$or = [{ email: { $regex: filterQuery, $options: 'i' } }];
   }
 
   const total = await User.countDocuments(filter);
