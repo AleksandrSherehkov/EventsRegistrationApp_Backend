@@ -8,18 +8,25 @@ const getAll = async (req, res) => {
   const limit = parseInt(req.query.limit, 10) || 9;
   const filterQuery = req.query.filterQuery || '';
   const startDate = req.query.date ? new Date(req.query.date) : null;
+  const endDate = startDate
+    ? new Date(new Date(req.query.date).setDate(startDate.getDate() + 1))
+    : null;
+  const categories = req.query.category ? req.query.category.split(',') : [];
   const skip = (page - 1) * limit;
 
   const filter = {};
   if (filterQuery) {
     filter.$or = [
       { title: { $regex: filterQuery, $options: 'i' } },
-      { category: { $regex: filterQuery, $options: 'i' } },
+
       { country: { $regex: filterQuery, $options: 'i' } },
     ];
   }
   if (startDate) {
-    filter.date = { $gte: startDate };
+    filter.date = { $gte: startDate, $lt: endDate };
+  }
+  if (categories.length > 0) {
+    filter.category = { $in: categories };
   }
 
   const total = await Event.countDocuments(filter);

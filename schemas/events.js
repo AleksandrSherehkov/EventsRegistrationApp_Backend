@@ -23,6 +23,7 @@ const eventQuerySchema = Joi.object({
   page: Joi.number().integer().min(1).default(1),
   limit: Joi.number().integer().min(1).max(100).default(9),
   filterQuery: Joi.string().allow(''),
+  category: Joi.string().optional(),
   date: Joi.date().iso().optional(),
 });
 
