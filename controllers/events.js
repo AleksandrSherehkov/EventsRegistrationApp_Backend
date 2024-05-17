@@ -18,7 +18,6 @@ const getAll = async (req, res) => {
   if (filterQuery) {
     filter.$or = [
       { title: { $regex: filterQuery, $options: 'i' } },
-
       { country: { $regex: filterQuery, $options: 'i' } },
     ];
   }
@@ -30,7 +29,10 @@ const getAll = async (req, res) => {
   }
 
   const total = await Event.countDocuments(filter);
-  const events = await Event.find(filter).skip(skip).limit(limit);
+  const events = await Event.find(filter)
+    .sort({ date: 1 })
+    .skip(skip)
+    .limit(limit);
 
   res.json({
     total,
