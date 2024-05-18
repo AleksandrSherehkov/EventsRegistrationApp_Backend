@@ -12,7 +12,7 @@ const router = express.Router();
 
 router.get('/', queryParamValidate, ctrl.getAll);
 router.get('/event/:eventId', ctrl.getByEventId);
-
+router.get('/registrations/:eventId', ctrl.registrationsPerDay);
 router.post('/', addUserValidate, ctrl.add);
 
 router.get('/up/ping', ctrl.getPing);

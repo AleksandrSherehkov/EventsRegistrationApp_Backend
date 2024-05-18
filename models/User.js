@@ -1,9 +1,20 @@
 const { Schema, model } = require('mongoose');
 
 const { handleValidateError, runUpdateValidators } = require('./hooks');
-
 const { customDateValidator } = require('../helpers');
 const { emailRegex } = require('../constants/constants');
+
+const eventRegistrationSchema = new Schema({
+  eventId: {
+    type: String,
+    required: true,
+  },
+  registrationDate: {
+    type: Date,
+    required: true,
+    default: Date.now,
+  },
+});
 
 const userSchema = new Schema(
   {
@@ -30,12 +41,13 @@ const userSchema = new Schema(
       required: [true, 'Set referralSource for user'],
     },
     eventIds: {
-      type: [String],
+      type: [eventRegistrationSchema],
       required: true,
     },
   },
   { versionKey: false, timestamps: true }
 );
+
 userSchema.post('save', handleValidateError);
 userSchema.pre('findOneAndUpdate', runUpdateValidators);
 userSchema.post('findOneAndUpdate', handleValidateError);
