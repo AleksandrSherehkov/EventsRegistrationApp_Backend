@@ -3,7 +3,7 @@ const { ctrlWrapper } = require('../decorators');
 const {
   calculateRegistrationsPerDay,
   generateChartImage,
-} = require('../helpers');
+} = require('../helpers/registrationUtils');
 
 const getAll = async (req, res) => {
   const page = parseInt(req.query.page, 10) || 1;
