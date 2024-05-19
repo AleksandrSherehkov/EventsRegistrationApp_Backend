@@ -8,7 +8,7 @@
   "servers": [
     {
       "url": "https://eventsregistrationapp-backend.onrender.com",
-      "description": "Local server"
+      "description": "Production server"
     }
   ],
   "tags": [
@@ -73,6 +73,26 @@
             "schema": {
               "type": "string",
               "format": "date"
+            }
+          },
+          {
+            "name": "sortBy",
+            "in": "query",
+            "description": "Sort by field",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": ["title", "category", "date"]
+            }
+          },
+          {
+            "name": "sortOrder",
+            "in": "query",
+            "description": "Sort order",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": ["asc", "desc"]
             }
           }
         ],
@@ -348,6 +368,38 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/UserArrayResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          }
+        }
+      }
+    },
+    "/api/users/registrations/{eventId}": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "Get registrations per day for an event",
+        "parameters": [
+          {
+            "name": "eventId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Registration data",
+            "content": {
+              "image/png": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
                 }
               }
             }
