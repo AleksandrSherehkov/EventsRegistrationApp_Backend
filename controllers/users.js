@@ -5,7 +5,7 @@ const { ChartJSNodeCanvas } = require('chartjs-node-canvas');
 
 const getAll = async (req, res) => {
   const page = parseInt(req.query.page, 10) || 1;
-  const limit = parseInt(req.query.limit, 10) || 9;
+  const limit = parseInt(req.query.limit, 10) || 12;
   const filterQuery = req.query.filterQuery || '';
 
   const skip = (page - 1) * limit;
