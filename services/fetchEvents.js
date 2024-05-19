@@ -5,6 +5,7 @@ require('dotenv').config();
 const fetchEvents = async () => {
   try {
     let nextUrl = 'https://api.predicthq.com/v1/events/?limit=50';
+
     while (nextUrl) {
       const response = await axios.get(nextUrl, {
         headers: {
