@@ -1,9 +1,7 @@
 const User = require('../models/User');
+
 const { ctrlWrapper } = require('../decorators');
-const {
-  calculateRegistrationsPerDay,
-  generateChartImage,
-} = require('../helpers/registrationUtils');
+const { ChartJSNodeCanvas } = require('chartjs-node-canvas');
 
 const getAll = async (req, res) => {
   const page = parseInt(req.query.page, 10) || 1;
@@ -32,7 +30,7 @@ const getAll = async (req, res) => {
 const getByEventId = async (req, res) => {
   const { eventId } = req.params;
   const page = parseInt(req.query.page, 10) || 1;
-  const limit = parseInt(req.query.limit, 10) || 9;
+  const limit = parseInt(req.query.limit, 10) || 12;
   const filterQuery = req.query.filterQuery || '';
 
   const skip = (page - 1) * limit;
@@ -89,12 +87,60 @@ const registrationsPerDay = async (req, res) => {
   const { eventId } = req.params;
 
   const users = await User.find({ 'eventIds.eventId': eventId });
-  const registrations = calculateRegistrationsPerDay(users, eventId);
+  const registrations = {};
+
+  users.forEach(user => {
+    user.eventIds.forEach(event => {
+      if (event.eventId === eventId) {
+        const date = event.registrationDate.toISOString().split('T')[0];
+        if (!registrations[date]) {
+          registrations[date] = 0;
+        }
+        registrations[date] += 1;
+      }
+    });
+  });
 
   const labels = Object.keys(registrations).sort((a, b) => a.localeCompare(b));
   const data = labels.map(date => registrations[date]);
 
-  const image = await generateChartImage(labels, data);
+  const maxRegistrations = Math.max(...data);
+  const minRegistrations = Math.min(...data);
+  const midThreshold =
+    minRegistrations + (maxRegistrations - minRegistrations) / 2;
+
+  const backgroundColors = data.map(value => {
+    if (value >= midThreshold) return 'rgba(75, 192, 192, 0.6)';
+    if (value > minRegistrations && value < midThreshold)
+      return 'rgba(255, 206, 86, 0.6)';
+    return 'rgba(255, 99, 132, 0.6)';
+  });
+
+  const chartJSNodeCanvas = new ChartJSNodeCanvas({ width: 800, height: 200 });
+  const configuration = {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [
+        {
+          label: 'Registrations per Day',
+          data,
+          backgroundColor: backgroundColors,
+          borderColor: 'rgba(75, 192, 192, 1)',
+          borderWidth: 1,
+        },
+      ],
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true,
+        },
+      },
+    },
+  };
+
+  const image = await chartJSNodeCanvas.renderToBuffer(configuration);
   res.set('Content-Type', 'image/png');
   res.send(image);
 };
