@@ -118,7 +118,7 @@ const registrationsPerDay = async (req, res) => {
 
   const chartJSNodeCanvas = new ChartJSNodeCanvas({ width: 400, height: 200 });
   const configuration = {
-    type: 'bar',
+    type: 'line',
     data: {
       labels,
       datasets: [
