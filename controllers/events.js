@@ -12,6 +12,8 @@ const getAll = async (req, res) => {
     ? new Date(new Date(req.query.date).setDate(startDate.getDate() + 1))
     : null;
   const categories = req.query.category ? req.query.category.split(',') : [];
+  const sortBy = req.query.sortBy || 'date';
+  const sortOrder = req.query.sortOrder === 'desc' ? -1 : 1;
   const skip = (page - 1) * limit;
 
   const filter = {};
@@ -30,7 +32,7 @@ const getAll = async (req, res) => {
 
   const total = await Event.countDocuments(filter);
   const events = await Event.find(filter)
-    .sort({ date: 1 })
+    .sort({ [sortBy]: sortOrder })
     .skip(skip)
     .limit(limit);
 

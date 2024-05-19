@@ -25,6 +25,8 @@ const eventQuerySchema = Joi.object({
   filterQuery: Joi.string().allow(''),
   category: Joi.string().optional().allow(''),
   date: Joi.date().iso().optional().allow(''),
+  sortBy: Joi.string().valid('title', 'category', 'date').optional(),
+  sortOrder: Joi.string().valid('asc', 'desc').optional(),
 });
 
 module.exports = {
