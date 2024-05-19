@@ -116,7 +116,7 @@ const registrationsPerDay = async (req, res) => {
     return 'rgba(255, 99, 132, 0.6)';
   });
 
-  const chartJSNodeCanvas = new ChartJSNodeCanvas({ width: 400, height: 200 });
+  const chartJSNodeCanvas = new ChartJSNodeCanvas({ width: 800, height: 200 });
   const configuration = {
     type: 'line',
     data: {
