@@ -16,7 +16,7 @@ mongoose
     setInterval(fetchEvents, 6 * 60 * 60 * 1000);
     fetchEvents();
 
-    setInterval(pingServer, 10 * 60 * 1000);
+    setInterval(pingServer, 19 * 60 * 1000);
     pingServer();
   })
   .catch(error => {
