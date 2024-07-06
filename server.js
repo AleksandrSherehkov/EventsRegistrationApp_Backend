@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const app = require('./app');
 const fetchEvents = require('./services/fetchEvents');
-const pingServer = require('./services/pingServer');
+// const pingServer = require('./services/pingServer');
 
 const { DB_HOST, PORT } = process.env;
 
@@ -16,8 +16,8 @@ mongoose
     setInterval(fetchEvents, 6 * 60 * 60 * 1000);
     fetchEvents();
 
-    setInterval(pingServer, 19 * 60 * 1000);
-    pingServer();
+    // setInterval(pingServer, 19 * 60 * 1000);
+    // pingServer();
   })
   .catch(error => {
     console.log(error.message);
